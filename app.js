@@ -7,6 +7,8 @@ const port = 3000
 const Prismic = require('@prismicio/client')
 const PrismicDOM = require('prismic-dom')
 
+const errorHandler = require('errorhandler')
+
 const initApi = req => {
   return Prismic.getApi(process.env.PRISMIC_ENDPOINT, {
     accessToken: process.env.PRISMIC_ACCESS_TOKEN,
@@ -23,6 +25,8 @@ const handleLinkResolver = (doc) => {
 
   return '/'
 }
+
+app.use(errorHandler());
 
 app.use((req, res, next)=>{
   res.locals.ctx = {
@@ -48,22 +52,30 @@ app.get('/', (req, res)=> {
   })
 })
 
-app.get('/about', (req, res)=> {
-  initApi(req).then(api=>{
-    api.query(Prismic.Predicates.any('document.type', ['about', 'metadata'])).then(response=> {
-      const { results } = response
-      const [about, metadata] = results
+app.get('/about', async(req, res)=> {
+  const api = await initApi(req)
+  const about = await api.getSingle('about')
+  const metadata = await api.getSingle('metadata')
 
-      res.render('pages/about', {
-        about,
-        metadata
-      })
-    })
+  res.render('pages/about', {
+    about,
+    metadata
   })
 })
 
-app.get('/detail/:uid', (req, res)=> {
-  res.render('pages/detail')
+app.get('/detail/:uid', async(req, res)=> {
+  const api = await initApi(req)
+  const product = await api.getByUID('product', req.params.uid, {
+    fetchLinks: 'collection.title'
+  })
+  const metadata = await api.getSingle('metadata')
+
+  console.log('el product', product.data)
+
+  res.render('pages/detail', {
+    product,
+    metadata
+  })
 })
 
 app.get('/collections/:uid', (req, res)=> {
