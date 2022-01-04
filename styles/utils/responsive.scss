@@ -1,0 +1,9 @@
+$breakpoints: (
+  'phone': 760px,
+  'tablet': 1024px,
+  'desktop': 2000px,
+  ) !default;
+
+@import '../../node_modules/include-media/dist/include-media';
+
+
