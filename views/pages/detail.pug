@@ -19,9 +19,9 @@ block content
             each highlight in product.data.highlights
               p.detail__information__highlight
                 svg.detail__information__highlight__icon
-                  use(xlink:href=`sprite-${highlight.highlight_icons.toLowerCase()}`)
+                  use(xlink:href=`sprite-${highlight.highlights_icon.toLowerCase()}`)
 
-                span.detail.__information__highlight__text=highlight.highlight_text
+                span.detail.__information__highlight__text!=highlight.highlights_text.replace(/\n/, '<br>')
 
           .detail__information__list
             each item in product.data.informations

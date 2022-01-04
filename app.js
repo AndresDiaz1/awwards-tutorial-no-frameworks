@@ -62,7 +62,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 const handleRequest =async api =>{
-  const metadata = await api.getSingle('metadata')
+  const metadata = await api.getSingle('meta')
   const preloader = await api.getSingle('preloader')
   const navigation = await api.getSingle('navigation')
   return {
@@ -105,10 +105,9 @@ app.get('/detail/:uid', async(req, res)=> {
   const product = await api.getByUID('product', req.params.uid, {
     fetchLinks: 'collection.title'
   })
-  const defaults = handleRequest(api)
+  const defaults = await handleRequest(api)
 
-
-
+  console.log('el productttt', product.data.highlights)
   res.render('pages/detail', {
     product,
     ...defaults
