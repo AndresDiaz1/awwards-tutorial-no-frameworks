@@ -62,6 +62,8 @@
 
 /*! https://mths.be/punycode v1.3.2 by @mathias */
 
+/*! images/placeholder.png */
+
 /*! punycode */
 
 /*! querystring */
@@ -93,6 +95,10 @@
 /*!**********************************!*\
   !*** ./node_modules/url/util.js ***!
   \**********************************/
+
+/*!************************************!*\
+  !*** ./app/images/placeholder.png ***!
+  \************************************/
 
 /*!***************************************!*\
   !*** ./node_modules/events/events.js ***!

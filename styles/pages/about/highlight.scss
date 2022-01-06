@@ -1,70 +1,113 @@
-.about__highlight{
-  position: relative;
+.about__highlight {
   margin: 20rem 0;
 
-  &:first-child{
+  &:first-child {
     margin-top: 0;
   }
 
-  &:last-child{
+  &:last-child {
     margin-bottom: 0;
   }
 }
 
-.about__hihglight__wrapper{
+.about__highlight__wrapper {
   height: 104rem;
-  width: 144rem;
-  position: relative;
   margin: auto;
+  position: relative;
+  width: 144rem;
 
   .about__highlight:nth-child(4) & {
     width: 104rem;
   }
+
+  @include media('<=phone') {
+    height: 316.2rem;
+    width: 100%;
+
+    .about__highlight:nth-child(4) & {
+      height: 119.3rem;
+      width: 100%;
+    }
+  }
 }
 
-.about_-highlight__label{
+.about__highlight__label {
   @extend %description-12;
-  text-transform: uppercase;
-  position: absolute;
+
   left: 50%;
+  letter-spacing: 0.1rem;
+  position: absolute;
   top: 9rem;
   transform: translateX(-50%);
-  width: 9.6rem;
   text-align: center;
-  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  width: 9.6rem;
+
+  @include media('<=phone') {
+    font-size: 2.4rem;
+    margin-top: 6.5rem;
+    top: 90rem;
+    width: 19rem;
+  }
 }
 
-.about__highlight__title{
+.about__highlight__title {
   @extend %title-200;
-  transform: translate(-50%, -50%) rotate(-90deg);
-  top: 50%;
-  position: absolute;
+
+  padding-bottom: 2rem;
   left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+
+  @include media('<=phone') {
+    font-size: 30rem;
+    margin-top: 6.5rem;
+  }
 }
 
-
-.about__highlight__media{
-  position: absolute;
+.about__highlight__media {
   height: 76rem;
+  position: absolute;
   width: 54rem;
 
   .about__highlight:nth-child(4) & {
-      height: 52.8rem;
-      width: 36rem;
+    height: 52.8rem;
+    width: 36rem;
   }
 
-  &:first-child{
-   left: 0;
-   top: 0;
+  &:first-child {
+    left: 0;
+    top: 0;
   }
 
-  &:last-child{
-    right: 0;
+  &:last-child {
     bottom: 0;
+    right: 0;
+  }
+  
+  @include media('<=phone') {
+    .about__highlight:last-child & {
+      height: 76rem;
+      width: 54rem;
+
+      &:first-child {
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+      }
+
+      &:last-child {
+        bottom: 0;
+        right: 50%;
+        transform: translateX(50%);
+      }
+    }
   }
 }
 
-.about__highlight__media__image{
+.about__highlight__media__image {
   @extend %cover;
+
   object-fit: cover;
 }

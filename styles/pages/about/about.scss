@@ -1,19 +1,20 @@
-.about{
-  background: $color-color-cadet-blue;
+.about {
+  background: $color-cadet-blue;
   color: $color-bright-gray;
 }
 
-.about__wrapper{
+.about__wrapper {
 
 }
 
-
-
-.about__title{
+.about__title {
   @extend %title-100;
-  max-width: 124rem;
+
   margin: auto;
+  max-width: 124rem;
   text-align: center;
+
+  @include media('<phone') {
+    max-width: 67.7rem;
+  }
 }
-
-
