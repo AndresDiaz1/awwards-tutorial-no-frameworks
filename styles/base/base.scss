@@ -5,8 +5,11 @@
 }
 
 html {
+  @extend %cover;
   $vw: 100vw;
   font-size: calc($vw / 1920px * 10px);
+  position: fixed;
+  overflow: hidden;
 
   @include media('<phone') {
     font-size: calc($vw / 750px * 10px);
@@ -16,6 +19,8 @@ html {
 body {
   font-family: $font-suisse-bp;
   @extend %description-16;
+  @extend %cover;
+  position: fixed;
 }
 
 a {
@@ -34,4 +39,8 @@ button {
 
 img {
   vertical-align: middle;
+}
+
+.content {
+  @extend %cover;
 }
