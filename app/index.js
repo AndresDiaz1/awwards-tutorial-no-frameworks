@@ -1,27 +1,45 @@
+/* eslint-disable no-new */
+
+import each from 'lodash/each';
+
+// eslint-disable-next-line no-unused-vars
+import Detection from 'classes/Detection';
+
+import Navigation from 'components/Navigation';
+import Preloader from 'components/Preloader';
+
 import About from 'pages/About';
 import Collections from 'pages/Collections';
-import Detail from 'pages/Detail';
 import Home from 'pages/Home';
-import each from 'lodash/each';
-import Preloader from 'components/Preloader';
+import Detail from 'pages/Detail';
 
 class App {
   constructor() {
-    this.createPreloader();
     this.createContent();
+
+    this.createPreloader();
+    this.createNavigation();
     this.createPages();
-    this.addEventLiteners()
+
+    this.addEventListeners();
     this.addLinkListeners();
+
     this.update();
   }
 
+  createNavigation() {
+    this.navigation = new Navigation({
+      template: this.template,
+    });
+  }
+
   createPreloader() {
-    this.preloader = new Preloader();
-    this.preloader.once('completed', this.onPreloaded.bind(this))
+    this.preloader = new Preloader({});
+    this.preloader.once('completed', this.onPreloaded.bind(this));
   }
 
   createContent() {
-    this.content  = document.querySelector('.content');
+    this.content = document.querySelector('.content');
     this.template = this.content.getAttribute('data-template');
   }
 
@@ -29,95 +47,109 @@ class App {
     this.pages = {
       about: new About(),
       collections: new Collections(),
+      home: new Home(),
       detail: new Detail(),
-      home: new Home()
-    }
+    };
 
     this.page = this.pages[this.template];
     this.page.create();
-
-
   }
 
-  // Events
-  onPreloaded() {
+  /*
+   * Events
+   */
 
+  onPreloaded() {
     this.preloader.destroy();
+
     this.onResize();
 
     this.page.show();
-
   }
 
-  async onChange(url) {
+  onPopState() {
+    this.onChange({
+      url: window.location.pathname,
+      push: false,
+    });
+  }
+
+  async onChange({ url, push = true }) {
     await this.page.hide();
 
-    const request = await window.fetch(url);
-    console.log(request)
-    if(request.status === 200) {
-      const html = await request.text();
-      console.log('el ahtml', html)
-      const div  = document.createElement('div');
-      div.innerHTML = html
+    const res = await window.fetch(url);
+    if (res.status === 200) {
+      const html = await res.text();
+      const div = document.createElement('div');
+
+      if (push) {
+        window.history.pushState({}, '', url);
+      }
+
+      div.innerHTML = html;
 
       const divContent = div.querySelector('.content');
-
-
-      this.template = divContent.getAttribute('data-template')
-
-      this.content.setAttribute('data-template', this.template)
       this.content.innerHTML = divContent.innerHTML;
+
+      this.template = divContent.getAttribute('data-template');
+
+      this.navigation.onChange(this.template);
+
+      this.content.setAttribute('data-template', this.template);
 
       this.page = this.pages[this.template];
 
-
-      this.page.create()
-
+      this.page.create();
 
       this.onResize();
 
       this.page.show();
-      this.addLinkListeners()
 
-    }else {
-      console.log('Error')
+      this.addLinkListeners();
+    } else {
+      console.error(`response status: ${res.status}`);
     }
   }
 
   onResize() {
-    if(this.page && this.page.onResize) {
+    if (this.page && this.page.onResize) {
       this.page.onResize();
     }
   }
 
-  // Loop
+  /*
+   *  LOop
+   */
+
   update() {
-    if(this.page && this.page.update) {
+    if (this.page && this.page.update) {
       this.page.update();
     }
+
     this.frame = window.requestAnimationFrame(this.update.bind(this));
   }
 
+  /*
+   * Listeners
+   */
 
-  // Listeners
-  addEventLiteners() {
-    window.addEventListener('resize', this.onResize.bind(this))
+  addEventListeners() {
+    window.addEventListener('popstate', this.onPopState.bind(this));
+    window.addEventListener('resize', this.onResize.bind(this));
   }
 
   addLinkListeners() {
     const links = document.querySelectorAll('a');
-    each(links , link=> {
-      link.onclick = event => {
-        const {href} =link;
+
+    each(links, (link) => {
+      link.onclick = (event) => {
         event.preventDefault();
 
-        this.onChange(href)
-      }
-    })
+        const { href } = link;
+        this.onChange({ url: href });
+      };
+    });
   }
 }
 
-setTimeout(()=> {
-  new App()
-}, 500)
-
+new App();

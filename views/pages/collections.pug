@@ -3,8 +3,8 @@ extends ../_includes/layout
 block variables
   - var template = 'collections'
 
-block content
-  .collections
+block content 
+  .collections(data-background="#c97164" data-color="#f9f1e7")
     .collections__wrapper
       .collections__titles
         each collection, index in collections
